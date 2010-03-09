@@ -5,7 +5,7 @@ description: Struct class, generates classes to be used similarly to C's struct 
 license: LGPL
 
 authors:
-- michaelficarra
+- Michael Ficarra
 
 requires:
 - core/1.2.4:Core
