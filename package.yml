@@ -2,6 +2,6 @@ name: Struct
 author: michael
 category: Native
 tags: [struct, c, structure, primitive]
-#docs: http://url.to.docs
+current: '0.1.1'
+docs: 'http://github.com/michaelficarra/MooTools-Struct'
 #demo: http://url.to.demo
-#current: 0.1
