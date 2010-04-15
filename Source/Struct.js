@@ -42,22 +42,22 @@ var Struct = new Class({
 		
 	createStruct: function(){
 		var that = this;
+		var storage = {};
 		return new Class({
-			_storage: {},
 			initialize: function(){
 				var args = arguments, len = args.length;
 				$each(that.args,function(arg,i){
-					this._storage[arg] = (i>=len ? undefined : args[i]);
+					storage[arg] = (i>=len ? undefined : args[i]);
 				}.bind(this));
 			},
 			members: function(){
 				return that.args;
 			},
 			each: function(fn,bind){
-				return $each(this._storage,fn,bind);
+				return $each(storage,fn,bind);
 			},
 			toHash: function(){
-				return $H(this._storage);
+				return $H(storage);
 			},
 			equals: function(other){
 				other = other.toHash();
