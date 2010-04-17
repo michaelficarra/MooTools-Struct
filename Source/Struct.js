@@ -66,9 +66,6 @@ var Struct = new Class({
 				});
 			}
 		});
-	},
-
-	addAccessors: function(struct){
 		var prefixes = {get: this.options.getterPrefix, set: this.options.setterPrefix};
 		$each(this.args,function(arg){
 			var getName, setName, baseName, implement = {};
@@ -76,11 +73,11 @@ var Struct = new Class({
 			baseName = arg.toString().capitalize().replace('_','-').camelCase();
 			if(prefixes.get != '') getName = prefixes.get + baseName;
 			if(prefixes.set != '') setName = prefixes.set + baseName;
-			implement[getName] = function(){ return this._storage[arg]; },
-			implement[setName] = function(val){ this._storage[arg] = val; return this; },
+			implement[getName] = function(){ return storage[arg]; },
+			implement[setName] = function(val){ storage[arg] = val; return this; },
 			struct.implement(implement);
 		}.bind(this));
-	}
+	},
 });
 
 Array.implement({
