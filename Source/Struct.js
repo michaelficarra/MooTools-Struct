@@ -35,14 +35,13 @@ var Struct = new Class({
 		}
 		this.args = $splat(args);
 		this.setOptions(options);
-		this.struct = this.createStruct();
-		return this.struct;
+		return this.struct = this.createStruct();
 	},
 		
 	createStruct: function(){
 		var that = this;
 		var storage = {};
-		return new Class({
+		var struct = new Class({
 			initialize: function(){
 				var args = arguments, len = args.length;
 				$each(that.args,function(arg,i){
@@ -76,6 +75,7 @@ var Struct = new Class({
 			implement[setName] = function(val){ storage[arg] = val; return this; },
 			struct.implement(implement);
 		}.bind(this));
+		return struct;
 	},
 });
 
