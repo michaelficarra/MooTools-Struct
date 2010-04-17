@@ -36,7 +36,6 @@ var Struct = new Class({
 		this.args = $splat(args);
 		this.setOptions(options);
 		this.struct = this.createStruct();
-		this.addAccessors(this.struct);
 		return this.struct;
 	},
 		
