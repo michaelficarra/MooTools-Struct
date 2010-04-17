@@ -1,24 +1,12 @@
 /*
 ---
 description: Struct class, generates classes to be used similarly to C's struct construct
-
 license: LGPL
-
-authors:
-- Michael Ficarra
-- Arian Stolwijk
-
-requires:
-- core/1.2.4:Core
-- core/1.2.4:Array
-- core/1.2.4:Hash
-- core/1.2.4:Class
-- core/1.2.4:Class.Extras
-
+authors: ['Michael Ficarra']
+requires: [Core,Array,Hash,Class,Options]
 provides: [Struct]
+... */
 
-...
-*/
 var Struct = new Class({
 
 	Implements: Options,
