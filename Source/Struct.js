@@ -16,12 +16,14 @@ var Struct = new Class({
 	},
 
 	initialize: function(){
-		var args = arguments, options;
-		if(args.length==2 && ['object','hash'].contains($type(arguments[1]))){
-			args = arguments[0];
-			options = arguments[1];
+		var args = $A(arguments),
+			options = {};
+		if(['object','hash'].contains($type(args.getLast()))) {
+			options = args.getLast();
+			args = args.slice(0,-1);
 		}
-		this.args = $splat(args);
+		if($type(arguments[0])=='array') args = arguments[0];
+		this.args = args;
 		this.setOptions(options);
 		return this.struct = this.createStruct();
 	},
@@ -29,6 +31,7 @@ var Struct = new Class({
 	createStruct: function(){
 		var that = this;
 		var storage = {};
+
 		var struct = new Class({
 			initialize: function(){
 				var args = arguments, len = args.length;
@@ -52,6 +55,7 @@ var Struct = new Class({
 				});
 			}
 		});
+
 		var prefixes = {get: this.options.getterPrefix, set: this.options.setterPrefix};
 		$each(this.args,function(arg){
 			var getName, setName, baseName, implement = {};
