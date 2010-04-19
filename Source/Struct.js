@@ -30,26 +30,26 @@ var Struct = new Class({
 		
 	createStruct: function(){
 		var that = this;
-		var storage = {};
 
 		var struct = new Class({
+			_storage: {},
 			initialize: function(){
 				var args = arguments, len = args.length;
 				$each(that.args,function(arg,i){
-					storage[arg] = (i>=len ? undefined : args[i]);
+					this._storage[arg] = (i>=len ? undefined : args[i]);
 				}.bind(this));
 			},
 			members: $lambda(that.args),
 			each: function(fn,bind){
-				return $each(storage,fn,bind);
+				return $each(this._storage,fn,bind);
 			},
 			toHash: function(){
-				return $H(storage);
+				return $H(this._storage);
 			},
 			equals: function(other){
 				other = other.toHash();
-				return $H(storage).getKeys().every(function(key){
-					return other.has(key) && storage[key]==other[key];
+				return this.toHash().getKeys().every(function(key){
+					return other.has(key) && this._storage[key]==other[key];
 				});
 			}
 		});
@@ -62,8 +62,8 @@ var Struct = new Class({
 			baseName = arg.toString().capitalize().replace('_','-').camelCase();
 			if(prefixes.get != '') getName = prefixes.get + baseName;
 			if(prefixes.set != '') setName = prefixes.set + baseName;
-			implement[getName] = function(){ return storage[arg]; },
-			implement[setName] = function(val){ storage[arg] = val; return this; },
+			implement[getName] = function(){ return this._storage[arg]; },
+			implement[setName] = function(val){ this._storage[arg] = val; return this; },
 			struct.implement(implement);
 		}.bind(this));
 		return struct;
