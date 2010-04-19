@@ -47,8 +47,17 @@ var Struct = new Class({
 				return $H(this._storage);
 			},
 			equals: function(other){
+				// enforce type-checking:
+				//if(other.constructor!==this.constructor) return false;
+				
+				// duck-typing equality:
+				var otherMembers = other.members();
+				var myMembers = this.members();
+				if(!myMembers.every(function(key){ return otherMembers.contains(key); })) return false;
+				if(!otherMembers.every(function(key){ return myMembers.contains(key); })) return false;
+				
 				other = other.toHash();
-				return this.toHash().getKeys().every(function(key){
+				return this.members().every(function(key){
 					return other.has(key) && this._storage[key]==other[key];
 				},this);
 			}
