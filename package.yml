@@ -2,6 +2,6 @@ name: Struct
 author: michael
 category: Native
 tags: [ruby, struct, c, structure, primitive]
-current: '0.2.4'
+current: '0.2.5'
 docs: 'http://github.com/michaelficarra/MooTools-Struct/blob/master/README.md'
 demo: 'http://jsfiddle.net/pcWBt/0/'
