@@ -1,6 +1,6 @@
 /*
 ---
-description: Struct class, generates classes to be used similarly to C's struct construct
+description: Generates classes to be used similarly to C's struct construct
 license: LGPL
 authors: ['Michael Ficarra']
 requires: [Core,Array,Hash,Class,Options]
@@ -39,9 +39,7 @@ var Struct = new Class({
 					storage[arg] = (i>=len ? undefined : args[i]);
 				}.bind(this));
 			},
-			members: function(){
-				return that.args;
-			},
+			members: $lambda(that.args),
 			each: function(fn,bind){
 				return $each(storage,fn,bind);
 			},
@@ -55,6 +53,7 @@ var Struct = new Class({
 				});
 			}
 		});
+		struct.members = $lambda(this.args);
 
 		var prefixes = {get: this.options.getterPrefix, set: this.options.setterPrefix};
 		$each(this.args,function(arg){
