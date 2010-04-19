@@ -50,7 +50,7 @@ var Struct = new Class({
 				other = other.toHash();
 				return this.toHash().getKeys().every(function(key){
 					return other.has(key) && this._storage[key]==other[key];
-				});
+				},this);
 			}
 		});
 		struct.members = $lambda(this.args);
