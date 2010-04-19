@@ -48,8 +48,8 @@ var Struct = new Class({
 			},
 			equals: function(other){
 				other = other.toHash();
-				return this.toHash().every(function(val,key){
-					return other[key] == val;
+				return $H(storage).getKeys().every(function(key){
+					return other.has(key) && storage[key]==other[key];
 				});
 			}
 		});
