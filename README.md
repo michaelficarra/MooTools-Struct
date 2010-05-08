@@ -10,26 +10,26 @@ How To Use
 
 Generate a `Struct` class with the constructor
 
-	var Car = new Struct('make','model','year')		// [Class:Car]
-	var myCar = new Car('Chrysler','Cirrus',2000)	// [Object:myCar]
+	var Car = new Struct('make','model','year')		// <#Class:Car>
+	var myCar = new Car('Chrysler','Cirrus',2000)	// <#Car:myCar>
 
-	console.log(myCar.getMake())					// 'Chrysler'
-	console.log(myCar.getModel())					// 'Cirrus'
-	console.log(myCar.getYear())					// 2000
+	myCar.getMake()					// 'Chrysler'
+	myCar.getModel()				// 'Cirrus'
+	myCar.getYear()					// 2000
 
-	console.log(myCar.setModel('Sebring'))			// [Object:myCar]
-	console.log(myCar.getModel())					// 'Sebring'
+	myCar.setModel('Sebring')		// <#Car:myCar>
+	myCar.getModel()				// 'Sebring'
 
 Undefined values will be ignored
 
-	var Car = new Struct('make','model','year')		// [Class:Car]
-	var myCar = new Car('Chrysler','Cirrus')		// [Object:myCar]
+	var Car = new Struct('make','model','year')		// <#Class:Car>
+	var myCar = new Car('Chrysler','Cirrus')		// <#Car:myCar>
 
-	console.log(myCar.getMake())					// 'Chrysler'
-	console.log(myCar.getYear())					// null
+	myCar.getMake()					// 'Chrysler'
+	myCar.getYear()					// null
 
-	console.log(myCar.setYear(2000))				// [Object:myCar]
-	console.log(myCar.getYear())					// 2000
+	myCar.setYear(2000)				// <#Car:myCar>
+	myCar.getYear()					// 2000
 
 Optionally, one may set the prefixes for the getter and setter
 methods when generating the class
@@ -37,18 +37,18 @@ methods when generating the class
 	var Car = new Struct('make','model','year',{
 		getterPrefix: '',
 		setterPrefix: 'change'
-	})												// [Class:Car]
-	var myCar = new Car('Chrysler','Cirrus',2000)	// [Object:myCar]
+	})												// <#Class:Car>
+	var myCar = new Car('Chrysler','Cirrus',2000)	// <#Car:myCar>
 
-	console.log(myCar.make())						// 'Chrysler'
-	console.log(myCar.year())						// 2000
-	console.log(myCar.changeYear(2010))				// [Object:myCar]
-	console.log(myCar.year())						// 2010
+	myCar.make()					// 'Chrysler'
+	myCar.year()					// 2000
+	myCar.changeYear(2010)			// <#Car:myCar>
+	myCar.year()					// 2010
 
 An `Array` may also be used to specify `Struct` members
 
-	var Car = new Struct(['make','model','year'])
-	var Car2 = new Struct('make','model','year')
+	var Car = new Struct(['make','model','year'])	// <#Class:Car>
+	var Car2 = new Struct('make','model','year')	// <#Class:Car2>
 
 	Car.members()		// ['make','model','year']
 	Car2.members()		// ['make','model','year']
@@ -60,7 +60,7 @@ Instance Methods
 In the following examples, assume the following `Struct` has been
 defined
 
-	var Car = new Struct('make','model','year')		// [Class:Car]
+	var Car = new Struct('make','model','year')		// <#Class:Car>
 
 ### toHash
 Retrieve a hash representation of the `Struct` and its contents
@@ -80,7 +80,7 @@ Retrieve the `Struct`'s properties
 Passes the given function to the `each` function of the hash
 representation of the `Struct`
 
-	var cadillac = new Car('Cadillac','CTS',2010)
+	var cadillac = new Car('Cadillac','CTS',2010)	// <#Car:cadillac>
 	cadillac.each(function(val,key){
 		console.log(key+' => '+val.toString())
 	})
@@ -108,7 +108,7 @@ Converts the `Array` instance to a `Struct` class, using the `Array`
 entries as `Struct` properties. Passes an optional `Hash`/`Object` to
 the `Struct` constructor as options
 
-	var Car = ['make','model','year'].toStruct({getterPrefix:''})	// [Class:Car]
+	var Car = ['make','model','year'].toStruct({getterPrefix:''})	// <#Class:Car>
 
 
 Class Methods
