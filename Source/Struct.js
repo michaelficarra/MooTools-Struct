@@ -65,24 +65,21 @@ var Struct = new Class({
 		struct.members = $lambda(this.args);
 
 		var prefixes = {get: this.options.getterPrefix, set: this.options.setterPrefix};
-		$each(this.args,function(arg){
-			var getName, setName, baseName, implement = {};
-			getName = setName = arg.toString().replace(/^[A-Z]/,function(m){return m.toLowerCase();}).replace('_','-').camelCase();
+		Array.each(this.args,function(arg){
+			var getName, setName, baseName;
+			getName = setName = arg.toString().replace(/^[A-Z]/,function(_){return _.toLowerCase();}).replace('_','-').camelCase();
 			baseName = arg.toString().capitalize().replace('_','-').camelCase();
 			if(prefixes.get != '') getName = prefixes.get + baseName;
 			if(prefixes.set != '') setName = prefixes.set + baseName;
-			implement[getName] = function(){ return this._storage[arg]; },
-			implement[setName] = function(val){ this._storage[arg] = val; return this; },
-			struct.implement(implement);
+			struct.implement(getName,function(){ return this._storage[arg]; });
+			struct.implement(setName,function(val){ this._storage[arg] = val; return this; });
 		}.bind(this));
 		return struct;
 	},
 });
 
-Array.implement({
-	toStruct:function(options){
-		return new Struct(this,options);
-	}
+Array.implement('toStruct',function(options){
+	return new Struct(this,options);
 });
 
 /* Copyright 2010 Michael Ficarra
