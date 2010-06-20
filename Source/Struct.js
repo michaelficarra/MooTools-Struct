@@ -16,66 +16,76 @@ var Struct = new Class({
 	},
 
 	initialize: function(){
-		var args = $A(arguments),
+		var args = Array.from(arguments),
 			options = {};
-		if(['object','hash'].contains($type(args.getLast()))) {
+		if(['object','hash'].contains(typeOf(args.getLast()))) {
 			options = args.getLast();
 			args = args.slice(0,-1);
 		}
-		if($type(arguments[0])=='array') args = arguments[0];
+		if(typeOf(arguments[0])=='array') args = arguments[0];
 		this.args = args;
 		this.setOptions(options);
 		return this.struct = this.createStruct();
 	},
-		
+
 	createStruct: function(){
 		var that = this;
 
 		var struct = new Class({
 			_storage: {},
 			initialize: function(){
-				var args = arguments, len = args.length;
-				$each(that.args,function(arg,i){
+				var args = arguments, len = arguments.length;
+				Array.each(that.args,function(arg,i){
 					this._storage[arg] = (i>=len ? undefined : args[i]);
-				}.bind(this));
+				},this);
 			},
-			members: $lambda(that.args),
-			each: function(fn,bind){
-				return $each(this._storage,fn,bind);
-			},
+			members: Function.from(that.args),
 			toHash: function(){
-				return $H(this._storage);
+				return new Hash(this._storage);
 			},
-			equals: function(other){
-				// enforce type-checking:
-				//if(other.constructor!==this.constructor) return false;
-				
-				// duck-typing equality:
-				var otherMembers = other.members();
-				var myMembers = this.members();
-				if(!myMembers.every(function(key){ return otherMembers.contains(key); })) return false;
-				if(!otherMembers.every(function(key){ return myMembers.contains(key); })) return false;
-				
-				other = other.toHash();
-				return this.members().every(function(key){
-					return other.has(key) && this._storage[key]==other[key];
+			equals: function(other,typeChecking){
+				if(typeChecking) {
+					// enforce type-checking:
+					if(other.constructor!==this.constructor) return false;
+				} else {
+					// duck-typing equality:
+					var otherMembers = other.members();
+					var myMembers = this.members();
+					if(!myMembers.every(function(_){ return otherMembers.contains(_); })) return false;
+					if(!otherMembers.every(function(_){ return myMembers.contains(_); })) return false;
+				}
+				// check values
+				var otherHash = other.toHash();
+				return this.members().every(function(_){
+					return otherHash.has(_) && this._storage[_]==otherHash[_];
 				},this);
 			}
 		});
-		struct.members = $lambda(this.args);
+		['each','erase','get','set','empty','include',
+		'map','filter','every','some','getKeys',
+		'getValues','getLength'].each(function(method){
+			struct.implement(method,function(){
+				return Hash[method].apply(this,[this._storage].concat(Array.from(arguments)));
+			});
+		});
+		struct.members = Function.from(this.args);
 
 		var prefixes = {get: this.options.getterPrefix, set: this.options.setterPrefix};
 		Array.each(this.args,function(arg){
+			if(!arg) return;
 			var getName, setName, baseName;
-			getName = setName = arg.toString().replace(/^[A-Z]/,function(_){return _.toLowerCase();}).replace('_','-').camelCase();
-			baseName = arg.toString().capitalize().replace('_','-').camelCase();
-			if(prefixes.get != '') getName = prefixes.get + baseName;
-			if(prefixes.set != '') setName = prefixes.set + baseName;
+			getName = setName = arg.toString()
+				.replace(/^[A-Z]/,function(_){return _.toLowerCase();})
+				.replace('_','-').camelCase().replace('-','_');
+			baseName = arg.toString().capitalize().replace('_','-').camelCase().replace('-','_');
+			if(prefixes.get) getName = prefixes.get + baseName;
+			if(prefixes.set) setName = prefixes.set + baseName;
 			struct.implement(getName,function(){ return this._storage[arg]; });
-			struct.implement(setName,function(val){ this._storage[arg] = val; return this; });
-		}.bind(this));
+			struct.implement(setName,function(_){ this._storage[arg] = _; return this; });
+		},this);
+
 		return struct;
-	},
+	}
 });
 
 Array.implement('toStruct',function(options){
